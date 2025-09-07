@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>牛马加速器</title>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body class="bg-dark-500 text-gray-200 font-inter min-h-screen flex overflow-hidden">
+    <div id="toastContainer" class="fixed top-6 right-6 z-[100] space-y-3"></div>
+    <nav id="sidebar" class="bg-dark-400 w-52 h-screen flex flex-col transition-all duration-300 ease-in-out z-20 flex-shrink-0">
+        <div class="p-4 border-b border-dark-200 flex items-center overflow-hidden">
+            <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mr-3 flex-shrink-0">
+                <i class="fa fa-rocket text-white text-xl"></i>
+            </div>
+            <h1 class="text-xl font-bold text-white nav-text whitespace-nowrap">牛马加速器</h1>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto scrollbar-hide py-4">
+            <ul class="whitespace-nowrap">
+                <li>
+                    <a href="#page1" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200 nav-item-active">
+                        <i class="fa fa-home w-6 text-center"></i>
+                        <span class="ml-3 nav-text">欢迎页</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page2" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200">
+                        <i class="fa fa-cubes w-6 text-center"></i>
+                        <span class="ml-3 nav-text">复用库</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page3" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200">
+                        <i class="fa fa-code w-6 text-center"></i>
+                        <span class="ml-3 nav-text">脚本</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page4" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200">
+                        <i class="fa fa-sliders w-6 text-center"></i>
+                        <span class="ml-3 nav-text">预设</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page5" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200">
+                        <i class="fa fa-play-circle w-6 text-center"></i>
+                        <span class="ml-3 nav-text">小游戏功能</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page6" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200">
+                        <i class="fa fa-calculator w-6 text-center"></i>
+                        <span class="ml-3 nav-text">表达式助手</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page7" class="nav-link flex items-center px-4 py-3 text-gray-300 hover:bg-dark-300 transition-all duration-200">
+                        <i class="fa fa-book w-6 text-center"></i>
+                        <span class="ml-3 nav-text">学习参考</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-4 flex justify-center mb-4">
+            <a href="#" id="layerScannerBtn" class="w-16 h-16 rounded-full flex items-center justify-center text-gray-400 hover:bg-dark-300 hover:text-white transition-colors duration-200">
+                <i class="fa fa-bolt text-xl"></i>
+            </a>
+        </div>
+    </nav>
+    
+    <div id="layerScannerFlyout" class="hidden absolute bottom-8 left-52 z-30 bg-dark-300 p-2 rounded-lg shadow-lg space-y-2 transition-all duration-300 opacity-0 -translate-x-4">
+        <button id="scanTextLayersBtn" data-type="text" class="flyout-btn">
+            <i class="fa fa-font text-3xl pointer-events-none"></i>
+            <span class="text-sm mt-2 pointer-events-none">文本</span>
+        </button>
+        <button id="scanImageLayersBtn" data-type="image" class="flyout-btn">
+            <i class="fa fa-image text-3xl pointer-events-none"></i>
+            <span class="text-sm mt-2 pointer-events-none">图片</span>
+        </button>
+    </div>
+
+    <div id="layerListPanel" class="hidden absolute top-0 left-52 z-20 bg-dark-400 w-80 h-screen flex flex-col p-4 shadow-2xl transition-all duration-300 opacity-0 -translate-x-4">
+        <div class="flex justify-between items-center mb-4 flex-shrink-0">
+            <div class="flex items-center space-x-3">
+                <button id="backToPrevCompBtn" class="hidden text-gray-400 hover:text-white"><i class="fa fa-arrow-left fa-lg"></i></button>
+                <h3 id="layerListTitle" class="text-lg font-bold text-white">图层列表</h3>
+            </div>
+            <button id="closeLayerListBtn" class="text-gray-400 hover:text-white"><i class="fa fa-times fa-lg"></i></button>
+        </div>
+        <div class="absolute top-16 bottom-4 left-4 right-4">
+            <div id="layerListContainer" class="w-full h-full overflow-y-scroll pr-2">
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-toggle-container" class="absolute top-1/2 -translate-y-1/2 left-52 z-30 transition-all duration-300 ease-in-out">
+        <button id="sidebar-toggle" class="w-6 h-16 bg-dark-300 hover:bg-primary rounded-r-lg flex items-center justify-center text-gray-400 hover:text-white transition-all duration-200">
+            <i id="sidebar-toggle-icon" class="fa fa-chevron-left transition-transform duration-300"></i>
+        </button>
+    </div>
+
+    <main class="flex-1 overflow-y-auto bg-dark-500 p-6 transition-all duration-300 ease-in-out">
+        <div id="page1" class="page h-full">
+            <div class="flex flex-col h-full">
+                <div class="flex-grow"></div> 
+                <div class="flex flex-col items-center text-center">
+                    <h2 class="text-3xl font-bold text-white mb-3">欢迎使用牛马加速器</h2>
+                    <p class="text-gray-400">让搬砖更高效，让摸鱼更科学</p>
+
+                    <div class="flex items-center space-x-4 mt-8">
+                        <button id="createDefaultFoldersBtn" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg flex items-center">
+                            开始搬砖
+                        </button>
+                        <button id="openFolderPanelBtn" class="btn-secondary font-bold py-3 px-8 rounded-lg text-lg flex items-center">
+                            <i class="fa fa-cog mr-2"></i>自定义
+                        </button>
+                    </div>
+                    
+                    <div class="flex flex-col items-center space-y-3 mt-6 w-full max-w-lg">
+                        <input type="text" id="organizeExcludeInput" class="input-field w-full text-center py-2" placeholder="排除项 (素材用“,”隔开，文件夹用“/”隔开)">
+                        <button id="organizeProjectBtn" class="btn-secondary font-bold py-3 px-8 rounded-lg text-lg flex items-center">
+                            一键整理
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-grow-[2]"></div> 
+            </div>
+        </div>
+
+        <div id="page2" class="page hidden h-full flex flex-col">
+            <div class="flex justify-between items-center mb-4 flex-shrink-0">
+                <h2 class="text-2xl font-bold text-white">复用库</h2>
+                <div class="flex items-center space-x-2">
+                    <button id="collectCompBtn" class="btn-secondary px-3 py-2 rounded-lg flex items-center text-sm">
+                        <i class="fa fa-archive mr-2"></i>收集合成
+                    </button>
+                    <button id="libraryFavoriteToggle" class="btn-secondary px-4 py-2 rounded-lg flex items-center text-sm">
+                        <i class="fa fa-star-o mr-2"></i>只看收藏
+                    </button>
+                </div>
+            </div>
+            <div id="reuseLibraryView" class="flex-1 min-h-0">
+                <div class="grid grid-cols-12 gap-4 h-full">
+                    <div class="col-span-3 bg-dark-400 rounded-xl p-3 flex flex-col">
+                        <div id="folderDropZone" class="flex items-center justify-center text-center p-4 mb-3 border-2 border-dashed border-dark-300 rounded-lg text-gray-400 hover:border-primary hover:text-white transition-colors duration-200 cursor-pointer">
+                            <span>拖放文件夹到此<br>添加快速访问</span>
+                        </div>
+                        <div id="quickAccessFolders" class="flex-1 overflow-y-auto pr-1 space-y-1">
+                        </div>
+                    </div>
+                    <div class="col-span-9 flex flex-col">
+                         <div id="folderContentHeader" class="flex justify-between items-center mb-4 flex-shrink-0">
+                            <div class="flex items-center min-w-0 flex-1">
+                                <button id="libraryBackBtn" class="hidden btn-icon btn-secondary mr-3 hover:bg-primary/50 flex-shrink-0">
+                                    <i class="fa fa-arrow-left"></i>
+                                </button>
+                                <div class="flex items-center bg-dark-300 rounded-lg px-2 py-1 flex-1 min-w-0">
+                                    <i class="fa fa-folder-open-o text-gray-400 mx-2"></i>
+                                    <input type="text" id="currentPathInput"
+                                        class="bg-transparent text-sm text-gray-300 w-full focus:outline-none truncate" 
+                                        placeholder="请从左侧选择文件夹，或在此输入路径后按回车" title="当前路径">
+                                    <button id="addCurrentPathToQuickAccessBtn" class="btn-icon w-7 h-7 hover:bg-dark-100 text-gray-400" title="将当前路径添加至快速访问">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button id="openPathBtn" class="btn-icon w-7 h-7 hover:bg-dark-100 text-gray-400" title="在文件管理器中打开">
+                                        <i class="fa fa-external-link"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative flex-1 min-h-0">
+                            <div id="folderContentWrapper" class="absolute inset-0 overflow-y-auto pr-2">
+                                <div id="folderContentGrid" class="gap-6">
+                                </div>
+                            </div>
+                            <div id="zoomControlContainer" class="absolute bottom-4 right-4 bg-dark-400/80 backdrop-blur-sm p-2 rounded-full shadow-lg z-10 flex items-center space-x-3">
+                                <i class="fa fa-search-minus text-gray-400 mx-1"></i>
+                                <input type="range" id="zoomSlider" min="50" max="150" value="100" class="cursor-pointer">
+                                <i class="fa fa-search-plus text-gray-400 mx-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page3" class="page hidden flex flex-col h-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-white">脚本</h2>
+                <div class="flex items-center space-x-3">
+                     <div class="relative">
+                        <input type="text" id="scriptSearchInput" placeholder="搜索脚本..." class="input-field pr-10 py-2">
+                        <i class="fa fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button id="loadScriptsBtn" class="btn-secondary px-3 py-2 rounded-lg flex items-center text-sm">
+                        <i class="fa fa-folder-open-o mr-2"></i>加载脚本
+                    </button>
+                    <button id="scriptFavoriteToggle" class="btn-secondary px-4 py-2 rounded-lg flex items-center">
+                        <i class="fa fa-star-o mr-2"></i>只看收藏
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6 flex-1">
+                <div class="col-span-1 min-w-0 flex flex-col">
+                    <div class="bg-dark-400 rounded-xl p-4 h-full relative">
+                        <div class="flex justify-between items-center mb-4 flex-shrink-0">
+                            <h3 class="font-semibold text-white">脚本列表</h3>
+                            <button id="addScriptGroupBtn" class="btn-icon btn-secondary hover:bg-dark-200" title="新建分组">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="absolute top-16 bottom-4 left-4 right-4">
+                            <div id="scriptListContainer" class="w-full h-full overflow-y-scroll pr-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-2 min-w-0 flex flex-col gap-6">
+                    <div class="bg-dark-400 rounded-xl p-4">
+                        <h3 class="font-semibold text-white mb-3">快速访问</h3>
+                        <div id="scriptFavoritesBar" class="flex flex-wrap gap-2">
+                        </div>
+                    </div>
+                    <div id="aiScriptGenerator" class="bg-dark-400 rounded-xl p-4 flex flex-col flex-1 resize-y overflow-hidden" style="min-height: 300px;">
+                        
+                        <div id="aiGeneratorMainView" class="hidden flex-col flex-1 min-h-0 relative">
+                             <div class="flex justify-between items-center mb-3 flex-shrink-0">
+                                <div class="flex items-center space-x-2">
+                                    <h3 class="font-semibold text-white">AI 脚本助手</h3>
+                                    <button id="aiNewChatBtn" class="btn-icon btn-secondary hover:bg-dark-200" title="新建对话">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button id="aiRunCustomScriptBtn" class="btn-icon btn-secondary" title="运行自定义脚本" style="display:block;">
+                                        <i class="fa fa-play"></i>
+                                    </button>
+                                    <button id="aiSettingsBtn" class="btn-icon btn-secondary" title="设置">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="absolute w-40 top-14 bottom-0 left-0 border-r border-dark-300 pr-2">
+                                <div id="aiConversationList" class="w-full h-full overflow-y-scroll space-y-1">
+                                </div>
+                            </div>
+                            
+                            <div class="absolute top-14 bottom-16 left-40 pl-2 right-0">
+                                <div id="aiChatLog" class="w-full h-full overflow-y-scroll p-2 space-y-4 bg-dark-500/50 rounded-lg">
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-0 left-40 pl-2 right-0 h-16 flex items-center pr-1 pt-2">
+                                <div class="relative flex items-center flex-shrink-0 w-full">
+                                    <textarea id="aiPromptInput" class="input-field w-full pr-12 py-2 resize-none" placeholder="告诉AI你想要做什么..." rows="1"></textarea>
+                                    <button id="aiSendBtn" class="absolute right-2 top-1/2 -translate-y-1/2 btn-primary p-2 w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg">
+                                        <i class="fa fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="aiGeneratorSetupView" class="hidden flex-1 flex-col justify-center items-center text-center p-4">
+                             <i class="fa fa-key text-4xl text-gray-500 mb-4"></i>
+                             <h4 class="text-lg font-bold text-white mb-2">设置 DeepSeek API Key</h4>
+                             <p class="text-sm text-gray-400 mb-4 max-w-xs">为了使用AI脚本生成功能，请输入您的API Key。密钥将仅保存在您的本地设备上。</p>
+                             <div class="relative w-full max-w-sm mb-4">
+                                <input type="password" id="aiApiKeyInput" class="bg-dark-300 border border-dark-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary/50 text-gray-200 text-center w-full pr-10" placeholder="sk-...">
+                                <button id="toggleApiKeyVisibilityBtn" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-white">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                             </div>
+                             <div id="apiKeyError" class="text-red-500 text-sm mb-3 h-5"></div>
+                             <button id="aiSaveApiKeyBtn" class="btn-primary py-2 px-8 rounded-lg">保存并开始使用</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page4" class="page hidden flex flex-col h-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">预设</h2>
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <input type="text" id="effectSearchInput" placeholder="搜索效果..." class="input-field pr-10 py-2">
+                        <i class="fa fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button id="favoriteToggle" class="btn-secondary px-4 py-2 rounded-lg flex items-center flex-shrink-0">
+                        <i class="fa fa-star-o mr-2"></i>只看收藏
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-6 flex-1">
+                <div class="col-span-1 min-w-0 flex flex-col">
+                    <div class="bg-dark-400 rounded-xl p-4 h-full relative">
+                        <h3 class="font-semibold text-white mb-4">效果列表</h3>
+                        <div class="absolute top-16 bottom-24 left-4 right-4 overflow-y-scroll pr-2" id="effectsContainer"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <button id="importFfxBtnBottom" class="w-full btn-secondary py-2.5 rounded-lg flex items-center justify-center">
+                                <i class="fa fa-folder-open mr-2"></i>导入 ffx
+                            </button>
+                            <button id="saveFfxBtnBottom" class="w-full btn-secondary py-2.5 rounded-lg flex items-center justify-center mt-2">
+                                <i class="fa fa-save mr-2"></i>保存 ffx
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-2 min-w-0">
+                    <div class="bg-dark-400 rounded-xl p-4">
+                        <h3 class="font-semibold text-white mb-4">效果预览</h3>
+                        <div id="previewContainer" class="bg-dark-500 rounded-lg p-6 h-64 flex items-center justify-center">
+                            <p class="text-white font-bold text-xl">预览元素</p>
+                        </div>
+                        <div class="flex justify-end space-x-3 mt-4">
+                            <button id="preRenderBtn" class="btn-secondary px-4 py-2 rounded-lg flex items-center">
+                                <i class="fa fa-cog mr-2"></i>预渲染
+                            </button>
+                            <div class="tooltip-container">
+                                <button id="openProjectBtn" class="btn-secondary px-4 py-2 rounded-lg flex items-center">
+                                    <i class="fa fa-folder-open mr-2"></i>打开工程文件夹
+                                </button>
+                                <span class="tooltip-text">ALT+左键可重新选择工程文件夹</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page5" class="page hidden">
+            <h2 class="text-2xl font-bold text-white">小游戏功能</h2>
+        </div>
+
+        <div id="page6" class="page hidden flex flex-col h-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-white">表达式助手</h2>
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <input type="text" id="expressionSearchInput" placeholder="搜索表达式..." class="input-field pr-10 py-2">
+                        <i class="fa fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button id="addExpressionBtn" class="btn-secondary px-3 py-2 rounded-lg flex items-center text-sm">
+                        <i class="fa fa-plus mr-2"></i>添加表达式
+                    </button>
+                    <button id="expressionFavoriteToggle" class="btn-secondary px-4 py-2 rounded-lg flex items-center">
+                        <i class="fa fa-star-o mr-2"></i>只看收藏
+                    </button>
+                </div>
+            </div>
+        
+            <div class="grid grid-cols-3 gap-6 flex-1 min-h-0">
+                <div class="col-span-1 min-w-0 flex flex-col">
+                    <div class="bg-dark-400 rounded-xl p-4 h-full relative">
+                        <h3 class="font-semibold text-white mb-4">表达式列表</h3>
+                        <div class="absolute top-16 bottom-4 left-4 right-4">
+                            <div id="expressionListContainer" class="w-full h-full overflow-y-scroll pr-2">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-span-2 min-w-0 flex flex-col gap-6">
+                    <div class="bg-dark-400 rounded-xl p-4">
+                        <h3 class="font-semibold text-white mb-3">快速访问</h3>
+                        <div id="expressionFavoritesBar" class="flex flex-wrap gap-2">
+                            </div>
+                    </div>
+                    <div id="aiExpressionHelper" class="bg-dark-400 rounded-xl p-4 flex flex-col flex-1 resize-y overflow-hidden" style="min-height: 300px;">
+                        <div id="aiExpressionSetupView" class="hidden flex-1 flex-col justify-center items-center text-center p-4">
+                             <i class="fa fa-key text-4xl text-gray-500 mb-4"></i>
+                             <h4 class="text-lg font-bold text-white mb-2">设置 DeepSeek API Key</h4>
+                             <p class="text-sm text-gray-400 mb-4 max-w-xs">为了使用AI表达式生成功能，请输入您的API Key。密钥将仅保存在您的本地设备上。</p>
+                             <div class="relative w-full max-w-sm mb-4">
+                                <input type="password" id="aiExpressionApiKeyInput" class="input-field text-center w-full pr-10" placeholder="sk-...">
+                                <button id="toggleExpressionApiKeyVisibilityBtn" class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-white">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                             </div>
+                             <div id="expressionApiKeyError" class="text-red-500 text-sm mb-3 h-5"></div>
+                             <button id="aiSaveExpressionApiKeyBtn" class="btn-primary py-2 px-8 rounded-lg">保存并开始使用</button>
+                        </div>
+                        <div id="aiExpressionMainView" class="hidden flex-col flex-1 min-h-0 relative">
+                             <div class="flex justify-between items-center mb-3 flex-shrink-0">
+                                <div class="flex items-center space-x-2">
+                                    <h3 class="font-semibold text-white">AI 表达式助手</h3>
+                                    <button id="aiExpressionNewChatBtn" class="btn-icon btn-secondary hover:bg-dark-200" title="新建对话">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button id="aiExpressionSettingsBtn" class="btn-icon btn-secondary" title="设置">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="absolute w-40 top-14 bottom-0 left-0 border-r border-dark-300 pr-2">
+                                <div id="aiExpressionConversationList" class="w-full h-full overflow-y-scroll space-y-1">
+                                    </div>
+                            </div>
+                            
+                            <div class="absolute top-14 bottom-16 left-40 pl-2 right-0">
+                                <div id="aiExpressionChatLog" class="w-full h-full overflow-y-scroll p-2 space-y-4 bg-dark-500/50 rounded-lg">
+                                    </div>
+                            </div>
+        
+                            <div class="absolute bottom-0 left-40 pl-2 right-0 h-16 flex items-center pr-1 pt-2">
+                                <div class="relative flex items-center flex-shrink-0 w-full">
+                                    <textarea id="aiExpressionPromptInput" class="input-field w-full pr-12 py-2 resize-none" placeholder="告诉AI你想要什么表达式..." rows="1"></textarea>
+                                    <button id="aiExpressionSendBtn" class="absolute right-2 top-1/2 -translate-y-1/2 btn-primary p-2 w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg">
+                                        <i class="fa fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page7" class="page hidden h-full flex flex-col">
+            <div class="p7-wrap">
+                <div class="p7-toolbar">
+                    <button id="p7Btn" class="btn-secondary px-4 py-2 rounded-lg flex items-center">
+                        <i class="fa fa-cog mr-2"></i>自定义
+                    </button>
+                </div>
+                
+                <div class="p7-grid-container">
+                    <div id="p7VideoGrid" class="p7-grid"></div> <div id="p7ImageGrid" class="p7-grid"></div> </div>
+        
+                <div class="p7-zoombox">
+                    <div class="p7-zoom">
+                        <i class="fa fa-search-minus text-gray-400"></i>
+                        <input id="p7Zoom" type="range" min="80" max="300" value="180">
+                        <i class="fa fa-search-plus text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="p7Menu"><button data-cmd="url">输入视频网址</button><div class="p7-divider"></div><button data-cmd="img">加载本地图片</button></div>
+            <input id="p7File" type="file" accept="image/*" />
+            <div id="p7Modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+                <div id="p7ModalContent" class="p7-panel transform transition-all scale-95 opacity-0">
+                    <div class="p7-hd">自定义伪装图片数量</div>
+                    <div class="p7-bd">
+                        <input id="p7Count" type="number" min="1" max="60" value="20">
+                        <button id="p7Apply" class="btn-primary p-2 rounded-lg flex-shrink-0 px-4">应用</button>
+                    </div>
+                    <div class="p7-ft">
+                        <button id="p7Close" class="btn-secondary py-2.5 px-4 rounded-lg">关闭</button>
+                    </div>
+                </div>
+            </div>
+            <div id="p7InputModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+                <div id="p7InputModalContent" class="p7-panel transform transition-all scale-95 opacity-0">
+                    <div class="p7-hd" id="p7InputModalTitle">输入视频真实链接</div>
+                    <div class="p7-bd">
+                        <input id="p7InputModalField" type="text" placeholder="请输入B站视频的真实链接..." class="input-field w-full">
+                        <button id="p7InputModalOk" class="btn-primary py-2 px-4 flex-shrink-0">确认</button>
+                    </div>
+                    <div class="p7-ft">
+                        <button id="p7GetLinkBtn" class="btn-secondary py-2 px-3 text-sm">获取真实链接</button>
+                        <button id="p7InputModalCancel" class="btn-secondary py-2 px-4">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="folderPanelModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+            <div id="folderPanelModalContent" class="bg-dark-400 rounded-xl p-6 w-full max-w-2xl flex flex-col transform transition-all scale-95 opacity-0" style="max-height: 90vh;">
+                <div class="flex justify-between items-center mb-4 flex-shrink-0">
+                    <h3 class="text-xl font-bold text-white">自定义工程文件夹</h3>
+                    <button id="closeFolderPanelBtn" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-times fa-lg"></i>
+                    </button>
+                </div>
+                <div class="bg-dark-300 p-4 rounded-lg mb-4 flex-shrink-0">
+                    <h4 class="text-lg font-semibold text-white mb-3">预设管理</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="presetSelector" class="block text-sm font-medium text-gray-300 mb-1.5">加载预设</label>
+                            <div class="flex gap-2">
+                                <select id="presetSelector" class="input-field"></select>
+                                <button id="deletePresetBtn" class="btn-danger p-2 rounded-lg flex-shrink-0"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="newPresetName" class="block text-sm font-medium text-gray-300 mb-1.5">保存新预设</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="newPresetName" placeholder="输入新预设名称" class="input-field">
+                                <button id="saveNewPresetBtn" class="btn-primary p-2 rounded-lg flex-shrink-0"><i class="fa fa-save"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-grow overflow-y-auto pr-2 scrollbar-hide mb-4">
+                    <div id="folderInputsContainer" class="space-y-3"></div>
+                </div>
+                <div class="flex items-center mt-2 mb-6 flex-shrink-0">
+                     <button id="addFolderInputBtn" class="btn-secondary py-2 px-4 rounded-lg flex items-center w-full justify-center">
+                        <i class="fa fa-plus mr-2"></i>添加文件夹
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-3 flex-shrink-0">
+                    <button id="createCustomFoldersBtn" class="btn-primary col-span-2 py-2.5 rounded-lg">立即创建</button>
+                    <button id="saveAsDefaultBtn" class="btn-secondary py-2.5 rounded-lg">保存为默认</button>
+                    <button id="restoreInitialBtn" class="btn-secondary py-2.5 rounded-lg">恢复初始</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="genericModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] pointer-events-none opacity-0 transition-opacity duration-300">
+            <div id="genericModalContent" class="bg-dark-400 rounded-xl p-6 w-full max-w-sm transform transition-all scale-95 opacity-0">
+                <h3 id="genericModalTitle" class="text-xl font-bold text-white mb-4"></h3>
+                <div id="genericModalBody" class="text-gray-300 mb-6"></div>
+                <div class="flex justify-end space-x-3">
+                    <button id="genericModalCancelBtn" class="btn-secondary px-4 py-2 rounded-lg">取消</button>
+                    <button id="genericModalConfirmBtn" class="btn-primary px-4 py-2 rounded-lg">确认</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="effectSettingsModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-40 transition-opacity duration-300 opacity-0 pointer-events-none">
+            <div id="effectSettingsModalContent" class="bg-dark-400 rounded-xl p-4 w-full max-w-md relative transform transition-all scale-95 opacity-0">
+                <button id="closeSettingsModalBtn" class="absolute top-3 right-3 btn-icon text-gray-400 hover:bg-dark-300">
+                    <i class="fa fa-times"></i>
+                </button>
+                <h3 class="font-semibold text-white mb-4">效果设置</h3>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1.5">效果名称</label>
+                        <input type="text" id="effectNameInput" value="" class="w-full input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1.5">效果简介</label>
+                        <input type="text" id="effectDescInput" value="" class="w-full input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-3">选择图标</label>
+                        <div id="iconSelection" class="grid grid-cols-6 gap-3">
+                            <div class="bg-dark-300 hover:bg-dark-200 w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer"><i class="fa fa-bolt text-white text-lg"></i></div>
+                            <div class="bg-dark-300 hover:bg-dark-200 w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer"><i class="fa fa-lightbulb-o text-white text-lg"></i></div>
+                            <div class="bg-dark-300 hover:bg-dark-200 w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer"><i class="fa fa-refresh text-white text-lg"></i></div>
+                            <div class="bg-dark-300 hover:bg-dark-200 w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer"><i class="fa fa-paint-brush text-white text-lg"></i></div>
+                            <div class="bg-dark-300 hover:bg-dark-200 w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer"><i class="fa fa-magic text-white text-lg"></i></div>
+                            <div class="bg-dark-300 hover:bg-dark-200 w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer"><i class="fa fa-star text-white text-lg"></i></div>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-sm font-medium text-gray-300 mb-3">自定义图标</label>
+                        <div id="customIconDropzone" class="bg-dark-300 w-24 h-24 rounded-lg flex flex-col items-center justify-center text-center p-2 cursor-pointer border-2 border-dashed border-dark-200 hover:border-primary transition-colors">
+                            <i class="fa fa-upload text-gray-400 mb-2 text-xl"></i>
+                            <p class="text-xs text-gray-400 leading-tight">点击或拖放</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 flex justify-end">
+                        <button id="saveEffectSettingsBtn" class="btn-primary py-2.5 px-6 rounded-lg">应用设置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="customScriptModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
+            <div id="customScriptModalContent" class="bg-dark-400 rounded-xl p-6 w-full max-w-2xl transform transition-all scale-95 opacity-0" style="height: 60vh; display: flex; flex-direction: column;">
+                <div class="flex justify-between items-center mb-4 flex-shrink-0">
+                    <h3 class="text-xl font-bold text-white">运行自定义脚本</h3>
+                    <button id="closeCustomScriptModalBtn" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-times fa-lg"></i>
+                    </button>
+                </div>
+                <textarea id="customScriptInput" class="w-full flex-1 bg-dark-500 text-gray-200 font-mono p-4 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 mb-4" placeholder="在此处粘贴您的ExtendScript代码..."></textarea>
+                <div class="flex justify-end space-x-3 flex-shrink-0">
+                     <button id="saveCustomScriptBtn" class="btn-secondary py-2.5 px-6 rounded-lg">保存脚本</button>
+                     <button id="runCustomScriptBtn" class="btn-primary py-2.5 px-6 rounded-lg">运行脚本</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script type="text/javascript" src="./js/vendor/CSInterface.js"></script>
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>
