@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="zh-CN"><head><link rel="stylesheet" href="/niuma-accelerator.9f367d21.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>牛马加速器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="bg-dark-700 text-gray-300 font-sans sidebar-collapsed">
+
+    <div class="flex h-screen">
+
+        <nav id="main-nav" class="bg-dark-800 flex flex-col justify-between transition-all duration-300">
+            <div class="flex flex-col items-center">
+                <div class="w-full h-16 flex items-center justify-center flex-shrink-0">
+                   </div>
+                <div class="nav-group">
+                    <a href="#page1" class="nav-link nav-item-active" title="欢迎页">
+                        <i class="fa fa-home nav-icon"></i><span class="nav-text">欢迎页</span>
+                    </a>
+                    <a href="#page2" class="nav-link" title="复用库">
+                        <i class="fa fa-folder-open nav-icon"></i><span class="nav-text">复用库</span>
+                    </a>
+                    <a href="#page3" class="nav-link" title="脚本">
+                        <i class="fa fa-code nav-icon"></i><span class="nav-text">脚本</span>
+                    </a>
+                    <a href="#page4" class="nav-link" title="预设">
+                        <i class="fa fa-magic nav-icon"></i><span class="nav-text">预设</span>
+                    </a>
+                    <a href="#page5-empty" class="nav-link" title="小游戏功能">
+                        <i class="fa fa-gamepad nav-icon"></i><span class="nav-text">小游戏功能</span>
+                    </a>
+                    <a href="#page6" class="nav-link" title="表达式助手">
+                        <i class="fa fa-sitemap nav-icon"></i><span class="nav-text">表达式助手</span>
+                    </a>
+                    <a href="#page7" class="nav-link" title="学习参考">
+                        <i class="fa fa-book nav-icon"></i><span class="nav-text">学习参考</span>
+                    </a>
+                </div>
+            </div>
+            <div class="flex flex-col items-center mb-2">
+                <div class="nav-group">
+                    <a href="#" id="sidebar-toggle" class="nav-link" title="折叠侧边栏">
+                        <i class="fa fa-bars nav-icon"></i><span class="nav-text">折叠侧边栏</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-1 flex flex-col bg-dark-600 overflow-hidden">
+            <div id="page1" class="page p-6 overflow-y-auto">
+                <h1 class="text-2xl font-bold text-white mb-4">欢迎使用牛马加速器</h1>
+                <p class="text-gray-400 mb-6">让搬砖更高效，让摸鱼更科学</p>
+                <div class="space-y-4">
+                    <div class="bg-dark-700 p-4 rounded-lg">
+                        <h2 class="font-semibold text-white mb-2">一键创建工程目录</h2>
+                        <div class="flex gap-2">
+                            <button id="createDefaultFoldersBtn" class="btn-primary">开始搬砖</button>
+                            <button id="openFolderPanelBtn" class="btn-secondary">自定义</button>
+                        </div>
+                    </div>
+                    <div class="bg-dark-700 p-4 rounded-lg">
+                        <h2 class="font-semibold text-white mb-2">一键整理项目</h2>
+                        <input type="text" id="organizeExcludeInput" class="input-field mb-2" placeholder="排除项,用逗号或空格隔开">
+                        <button id="organizeProjectBtn" class="btn-primary">一键整理</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page2" class="page hidden p-4">
+                <div class="h-full flex flex-col">
+                    <div class="flex-shrink-0 mb-2 p-2 bg-dark-700 rounded-lg flex items-center gap-2">
+                        <button id="collectCompBtn" class="btn-primary">采集当前合成</button>
+                        <button id="libraryFavoriteToggle" class="btn-secondary"><i class="fa fa-star-o mr-2"></i>只看收藏</button>
+                    </div>
+                    <div class="flex-1 flex gap-4 overflow-hidden">
+                        <div class="w-48 flex-shrink-0 bg-dark-700 rounded-lg flex flex-col">
+                            <div id="folderDropZone" class="p-4 text-center border-2 border-dashed border-dark-500 m-2 rounded-lg text-gray-500">拖放文件夹至此</div>
+                            <div id="quickAccessFolders" class="flex-1 overflow-y-auto p-1"></div>
+                        </div>
+                        <div class="flex-1 flex flex-col bg-dark-700 rounded-lg">
+                            <div class="flex items-center p-2 border-b border-dark-500">
+                                <button id="libraryBackBtn" class="btn-icon hidden"><i class="fa fa-arrow-left"></i></button>
+                                <input id="currentPathInput" type="text" class="input-field flex-1 mx-2 bg-dark-800" placeholder="当前路径...">
+                                <button id="addCurrentPathToQuickAccessBtn" class="btn-icon"><i class="fa fa-plus-circle"></i></button>
+                                <button id="openPathBtn" class="btn-icon"><i class="fa fa-external-link"></i></button>
+                            </div>
+                            <div id="folderContentGrid" class="flex-1 overflow-y-auto p-2"></div>
+                            <div class="p-2 border-t border-dark-500"><input id="zoomSlider" type="range" min="50" max="200" value="100" class="w-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page3" class="page hidden">
+                <div class="h-full flex">
+                    <div class="w-56 flex-shrink-0 bg-dark-700 flex flex-col p-2">
+                        <input id="scriptSearchInput" type="text" class="input-field mb-2" placeholder="搜索脚本...">
+                        <div class="flex gap-2 mb-2">
+                            <button id="loadScriptsBtn" class="btn-secondary flex-1">加载脚本</button>
+                            <button id="addScriptGroupBtn" class="btn-secondary">+</button>
+                        </div>
+                        <div id="scriptListContainer" class="flex-1 overflow-y-auto"></div>
+                        <button id="scriptFavoriteToggle" class="btn-secondary mt-2 w-full"><i class="fa fa-star-o mr-2"></i>只看收藏</button>
+                        <div id="scriptFavoritesBar" class="mt-2 p-1 bg-dark-800 rounded-lg"></div>
+                    </div>
+                    <div id="aiGeneratorMainView" class="flex-1 flex-col p-2 hidden">
+                        </div>
+                    <div id="aiGeneratorSetupView" class="flex-1 flex-col p-2 hidden">
+                        </div>
+                </div>
+            </div>
+            
+            <div id="page4" class="page hidden">
+                <div class="h-full flex gap-4 p-4">
+                    <div class="w-64 flex flex-col bg-dark-700 rounded-lg p-2">
+                        <input type="text" id="effectSearchInput" class="input-field mb-2" placeholder="搜索效果...">
+                        <button id="favoriteToggle" class="btn-secondary mb-2"><i class="fa fa-star-o mr-2"></i>只看收藏</button>
+                        <div id="effectsContainer" class="flex-1 overflow-y-auto"></div>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-4">
+                        <div id="previewContainer" class="bg-dark-700 rounded-lg p-6 h-64 flex items-center justify-center"></div>
+                        <div class="flex gap-2">
+                            <button id="preRenderBtn" class="btn-primary">预渲染</button>
+                            <button id="openProjectBtn" class="btn-secondary">打开工程文件夹</button>
+                            <button id="importFfxBtnBottom" class="btn-secondary">导入FFX</button>
+                            <button id="saveFfxBtnBottom" class="btn-secondary">保存为FFX</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="page6" class="page hidden">
+                 </div>
+
+            <div id="page7" class="page hidden p-4 p7-wrap">
+                 <div class="p7-toolbar">
+                    <input type="range" id="p7Zoom" min="100" max="300" value="180">
+                    <button id="p7Btn" class="btn-secondary">设置数量</button>
+                 </div>
+                 <div class="p7-grid-container">
+                    <div id="p7ImageGrid" class="p7-grid"></div>
+                    <div id="p7VideoGrid" class="p7-grid"></div>
+                 </div>
+                 <div id="p7Menu" class="p7-menu">...</div>
+                 <input type="file" id="p7File" class="hidden">
+            </div>
+
+        </main>
+    </div>
+    
+    <div id="folderPanelModal" class="modal-backdrop hidden">
+        <div id="folderPanelModalContent" class="modal-content">
+            <h2 class="text-xl font-bold mb-4">自定义文件夹</h2>
+            <div id="folderInputsContainer" class="space-y-2 mb-4"></div>
+            <button id="addFolderInputBtn" class="btn-secondary mb-4">添加一个</button>
+            <div class="flex justify-between">
+                <button id="createCustomFoldersBtn" class="btn-primary">创建</button>
+                <button id="saveAsDefaultBtn" class="btn-secondary">设为默认</button>
+                <button id="restoreInitialBtn" class="btn-secondary">恢复初始</button>
+                <button id="closeFolderPanelBtn" class="btn-danger">关闭</button>
+            </div>
+             <div class="mt-4">
+                <select id="presetSelector" class="input-field"></select>
+                <input type="text" id="newPresetName" class="input-field" placeholder="新预设名称">
+                <button id="saveNewPresetBtn" class="btn-secondary">保存新预设</button>
+                <button id="deletePresetBtn" class="btn-danger">删除预设</button>
+             </div>
+        </div>
+    </div>
+    
+    <div id="effectSettingsModal" class="modal-backdrop hidden">
+        <div id="effectSettingsModalContent" class="modal-content">
+             <h2 class="text-xl font-bold mb-4">效果设置</h2>
+             <input id="effectNameInput" type="text" class="input-field mb-2" placeholder="效果名称">
+             <textarea id="effectDescInput" class="input-field mb-2" placeholder="效果描述"></textarea>
+             <div id="iconSelection" class="flex gap-2 mb-2">...</div>
+             <div id="customIconDropzone" class="w-24 h-24 border-2 border-dashed rounded-lg flex flex-col items-center justify-center"></div>
+             <div class="flex justify-end gap-2 mt-4">
+                <button id="saveEffectSettingsBtn" class="btn-primary">保存</button>
+                <button id="closeSettingsModalBtn" class="btn-secondary">取消</button>
+             </div>
+        </div>
+    </div>
+
+    <div id="p7Modal" class="modal-backdrop hidden"><div id="p7ModalContent" class="modal-content">...</div></div>
+     <div id="p7InputModal" class="modal-backdrop hidden"><div id="p7InputModalContent" class="modal-content">...</div></div>
+
+    <div id="customScriptModal" class="modal-backdrop hidden">
+        <div id="customScriptModalContent" class="modal-content">
+             <h2 class="text-xl font-bold mb-4">运行/保存自定义脚本</h2>
+             <textarea id="customScriptInput" class="input-field w-full h-48 font-mono"></textarea>
+             <div class="flex justify-end gap-2 mt-4">
+                <button id="runCustomScriptBtn" class="btn-primary">运行</button>
+                <button id="saveCustomScriptBtn" class="btn-secondary">保存</button>
+                <button id="closeCustomScriptModalBtn" class="btn-danger">关闭</button>
+             </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    
+    <script type="module" src="/niuma-accelerator.b828852a.js" charset="UTF-8"></script>
+    
+
+</body></html>

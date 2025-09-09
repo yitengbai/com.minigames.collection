@@ -1,0 +1,39 @@
+Folder PATH listing
+Volume serial number is 2E38-9F1B
+C:.
+|   folder_tree.txt
+|   generate_tree.bat
+|   index.html
+|   
++---assets
+|   \---icon
++---css
+|       main.css
+|       
++---CSXS
+|       manifest.xml
+|       
++---js
+|   |   ipc.js
+|   |   main.js
+|   |   
+|   +---modules
+|   |       page1_home.js
+|   |       page2_library.js
+|   |       page3_scripts.js
+|   |       page4_effects.js
+|   |       page6_expressions.js
+|   |       page7_learning.js
+|   |       
+|   +---shared
+|   |       api.js
+|   |       constants.js
+|   |       ui.js
+|   |       
+|   \---vendor
+|           CSInterface.js
+|           
++---jsx
+|       main.jsx
+|       
+\---tools
